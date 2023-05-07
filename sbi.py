@@ -3,6 +3,7 @@ import numpy as np
 import talib
 import json
 from angelbroking import AngelBroking
+from smartapi import SmartConnect
 
 config=json.loads("config.json")
 # Connect to Angel API
@@ -11,6 +12,21 @@ client_code = config['client_code']
 password = config['password']
 angel = AngelBroking(api_key=api_key, client_code=client_code, password=password)
 login = angel.generate_session()
+
+obj=SmartConnect(api_key=api_key,
+                #optional
+                #access_token = "your access token",
+                #refresh_token = "your refresh_token")
+
+data = obj.generateSession("Your Client ID","Your Password","Your totp")
+refreshToken= data['data']['refreshToken']
+
+#fetch the feedtoken
+feedToken=obj.getfeedToken()
+
+#fetch User Profile
+userProfile= obj.getProfile(refreshToken)
+
 
 # Fetch historical data
 symbol = 'SBIN' # Replace with the symbol you want to trade
